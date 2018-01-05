@@ -2,6 +2,7 @@
 using Microsoft.Azure.EventHubs;
 using System.Threading.Tasks;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace SendEvent
 {
@@ -45,7 +46,11 @@ namespace SendEvent
             {
                 try
                 {
-                    var message = $"Message {i}";
+                    var message = JsonConvert.SerializeObject(new
+                    {
+                        Time = DateTime.Now,
+                        Message = i
+                    });
                     Console.WriteLine($"Sending message: {message}");
                     await eventHubClient.SendAsync(new EventData(Encoding.UTF8.GetBytes(message)));
                 }
